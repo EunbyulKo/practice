@@ -1,0 +1,76 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head> 
+	<meta charset="UTF-8" /> 
+	<title>이메일 로그인 테스트</title> 
+</head> 
+
+<script src="//code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+	function sendMail(){
+		var email = $('input[type=email]').val();
+		
+		if(checkValue(email)) {
+			alert("이메일을 확인해주세요");
+			return;
+		}
+		
+		$.ajax({
+		    url: '/sns/em_login/send_mail',
+		    method: 'GET',
+		    data : { email : email},
+		    success : function (res) {
+		        alert("인증번호 발송");
+		    },
+		    error: function (xhr) {
+		        alert("fail");
+		    }
+		});
+	};
+	
+	function authorization(){
+		var email = $('input[name=email]').val();
+		var code = $('input[name=code]').val();
+		
+		if(checkValue(email)) {
+			alert("이메일을 확인해주세요");
+			return;
+		}
+		
+		if(checkValue(code)) {
+			alert("인증코드를 확인해주세요");
+			return;
+		}
+		
+		
+		$.ajax({
+		    url: '/sns/em_login/authorization',
+		    method: 'POST',
+		    data : { email : email, code : code},
+		    success : function (res) {
+		        alert("인증완료!");
+		    },
+		    error: function (xhr) {
+		        alert("fail");
+		    }
+		});
+	};
+	
+	function checkValue(value) {
+		return value == null || value == undefined || value =='';
+	}
+	
+	
+</script>
+
+<body> 
+	
+   이메일 : <input type="email" name="email">
+   <button id="mail" onclick='sendMail();'>전송</button><br/>
+   인증번호 : <input name="code">
+   <button id="code" onclick='authorization();'>인증</button><br/>
+	
+</body> 
+</html>
